@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rea Vaya BRT Training System - Litsamaiso</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>Rea Vaya Training System</h2>
+                <span class="company-name">Litsamaiso Pty Ltd</span>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="#" class="nav-link" data-view="landing">Home</a>
+                <a href="#" class="nav-link" data-view="student">Student View</a>
+                <a href="#" class="nav-link" data-view="manager">Manager View</a>
+            </div>
+            <button class="nav-toggle" id="navToggle">☰</button>
+        </div>
+    </nav>
+
+    <!-- Landing Page -->
+    <section id="landing" class="view active">
+        <div class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Professional BRT Driver Training System</h1>
+                    <p class="hero-subtitle">Comprehensive Learning Management System for Rea Vaya Bus Rapid Transit Operations</p>
+                    <div class="hero-stats">
+                        <div class="stat-card">
+                            <h3>245</h3>
+                            <p>Active Drivers</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>78%</h3>
+                            <p>Compliance Rate</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>87</h3>
+                            <p>Average Score</p>
+                        </div>
+                    </div>
+                    <div class="hero-actions">
+                        <button class="btn btn--primary btn--lg" data-view="student">View Student Dashboard</button>
+                        <button class="btn btn--outline btn--lg" data-view="manager">Manager Analytics</button>
+                    </div>
+                </div>
+                <div class="hero-features">
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">🚌</div>
+                            <h4>Pre-Trip Inspections</h4>
+                            <p>Comprehensive training on safety checks and compliance procedures</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">📱</div>
+                            <h4>Mobile Learning</h4>
+                            <p>Access training materials anytime, anywhere on mobile devices</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">📊</div>
+                            <h4>Progress Tracking</h4>
+                            <p>Real-time monitoring of training progress and certification status</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🏆</div>
+                            <h4>Digital Certificates</h4>
+                            <p>Automated certificate generation and compliance management</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="about-section">
+            <div class="container">
+                <h2>Transforming BRT Driver Training</h2>
+                <p>Our ERPNext-powered LMS delivers comprehensive training solutions specifically designed for Johannesburg's Rea Vaya Bus Rapid Transit system, ensuring driver competency and passenger safety across all routes.</p>
+                <div class="route-info">
+                    <h4>Serving Key Routes:</h4>
+                    <div class="route-badges">
+                        <span class="route-badge">Johannesburg CBD</span>
+                        <span class="route-badge">Soweto</span>
+                        <span class="route-badge">Ellis Park</span>
+                        <span class="route-badge">Thokoza Park</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Student Dashboard -->
+    <section id="student" class="view">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="user-info">
+                    <div class="avatar">SM</div>
+                    <div class="user-details">
+                        <h2>Welcome, Sipho Mthembu</h2>
+                        <p>BRT Driver - Route: Johannesburg CBD</p>
+                    </div>
+                </div>
+                <div class="user-stats">
+                    <div class="progress-ring">
+                        <div class="progress-number">85%</div>
+                        <div class="progress-label">Overall Progress</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="section">
+                    <h3>My Courses</h3>
+                    <div class="course-grid">
+                        <div class="course-card active" data-course="pre-trip">
+                            <div class="course-status">✓ In Progress</div>
+                            <h4>Pre-Trip Inspection Fundamentals</h4>
+                            <p>Comprehensive training on pre-trip inspection procedures for Rea Vaya BRT buses</p>
+                            <div class="course-meta">
+                                <span>📚 5 Modules</span>
+                                <span>⏱️ 45 minutes</span>
+                                <span>📈 78% Complete</span>
+                            </div>
+                            <button class="btn btn--primary">Continue Course</button>
+                        </div>
+                        <div class="course-card">
+                            <div class="course-status">🔜 Coming Soon</div>
+                            <h4>Emergency Procedures</h4>
+                            <p>Emergency response and safety protocols for BRT operations</p>
+                            <div class="course-meta">
+                                <span>📚 3 Modules</span>
+                                <span>⏱️ 30 minutes</span>
+                            </div>
+                            <button class="btn btn--outline" disabled>Coming Soon</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Recent Notifications</h3>
+                    <div class="notification-list">
+                        <div class="notification">
+                            <div class="notification-icon">📋</div>
+                            <div class="notification-content">
+                                <h4>Complete Pre-Trip Assessment</h4>
+                                <p>Your assessment is due by August 25, 2025</p>
+                                <span class="notification-time">2 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="notification">
+                            <div class="notification-icon">🏆</div>
+                            <div class="notification-content">
+                                <h4>Certification Renewal Reminder</h4>
+                                <p>Your BRT certification expires on August 15, 2026</p>
+                                <span class="notification-time">1 day ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>My Certificates</h3>
+                    <div class="certificate-grid">
+                        <div class="certificate-card" data-certificate="basic">
+                            <div class="certificate-icon">🏆</div>
+                            <h4>Basic BRT Operations</h4>
+                            <p>Completed: March 15, 2024</p>
+                            <p class="cert-validity">Valid until: March 15, 2026</p>
+                            <button class="btn btn--outline btn--sm">View Certificate</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Content -->
+    <section id="course" class="view">
+        <div class="course-container">
+            <div class="course-sidebar">
+                <button class="back-btn" data-view="student">← Back to Dashboard</button>
+                <h3>Pre-Trip Inspection Fundamentals</h3>
+                <div class="module-list">
+                    <div class="module-item active" data-module="1">
+                        <span class="module-number">1</span>
+                        <span class="module-title">Introduction to Pre-Trip Inspections</span>
+                        <span class="module-status">✓</span>
+                    </div>
+                    <div class="module-item" data-module="2">
+                        <span class="module-number">2</span>
+                        <span class="module-title">Exterior Inspection Procedures</span>
+                        <span class="module-status">▶</span>
+                    </div>
+                    <div class="module-item" data-module="3">
+                        <span class="module-number">3</span>
+                        <span class="module-title">Interior Safety Checks</span>
+                        <span class="module-status">○</span>
+                    </div>
+                    <div class="module-item" data-module="4">
+                        <span class="module-number">4</span>
+                        <span class="module-title">Mechanical Systems</span>
+                        <span class="module-status">○</span>
+                    </div>
+                    <div class="module-item" data-module="5">
+                        <span class="module-number">5</span>
+                        <span class="module-title">Final Assessment</span>
+                        <span class="module-status">○</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="course-content">
+                <div class="content-header">
+                    <h2 id="moduleTitle">Exterior Inspection Procedures</h2>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 40%"></div>
+                    </div>
+                    <span class="progress-text">Module 2 of 5</span>
+                </div>
+                
+                <div class="content-body">
+                    <div id="moduleContent">
+                        <h3>Exterior Inspection Checklist</h3>
+                        <p>The exterior inspection is crucial for ensuring passenger safety and vehicle reliability. Follow this systematic approach:</p>
+                        
+                        <div class="checklist-section">
+                            <h4>Visual Inspection Items</h4>
+                            <div class="checklist">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" class="inspection-item" data-item="tires">
+                                    <span class="checkmark">✓</span>
+                                    Check tire condition and pressure
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" class="inspection-item" data-item="body">
+                                    <span class="checkmark">✓</span>
+                                    Inspect body panels for damage
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" class="inspection-item" data-item="lights">
+                                    <span class="checkmark">✓</span>
+                                    Test all lights and indicators
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" class="inspection-item" data-item="mirrors">
+                                    <span class="checkmark">✓</span>
+                                    Check mirrors and windows
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" class="inspection-item" data-item="ramp">
+                                    <span class="checkmark">✓</span>
+                                    Inspect wheelchair ramp operation
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="info-box">
+                            <h4>⚠️ Safety Reminder</h4>
+                            <p>Any defects found during inspection must be reported immediately to the maintenance team. Do not operate the vehicle if critical safety issues are identified.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="content-actions">
+                        <button class="btn btn--outline" id="prevModule">Previous</button>
+                        <button class="btn btn--primary" id="nextModule">Next Module</button>
+                        <button class="btn btn--primary" id="takeQuiz" style="display: none;">Take Assessment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Assessment -->
+    <section id="quiz" class="view">
+        <div class="container">
+            <div class="quiz-container">
+                <div class="quiz-header">
+                    <button class="back-btn" data-view="course">← Back to Course</button>
+                    <h2>Pre-Trip Inspection Assessment</h2>
+                    <div class="quiz-progress">
+                        <span>Question <span id="currentQuestion">1</span> of <span id="totalQuestions">2</span></span>
+                    </div>
+                </div>
+                
+                <div class="quiz-content">
+                    <div class="question-card">
+                        <h3 id="questionText">How often should tire pressure be checked during pre-trip inspection?</h3>
+                        <div class="options" id="questionOptions">
+                            <label class="option">
+                                <input type="radio" name="question" value="0">
+                                <span class="option-text">Every trip</span>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="question" value="1">
+                                <span class="option-text">Weekly</span>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="question" value="2">
+                                <span class="option-text">Monthly</span>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="question" value="3">
+                                <span class="option-text">When they look low</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="quiz-actions">
+                        <button class="btn btn--outline" id="prevQuestion" disabled>Previous</button>
+                        <button class="btn btn--primary" id="nextQuestion">Next Question</button>
+                        <button class="btn btn--primary" id="submitQuiz" style="display: none;">Submit Assessment</button>
+                    </div>
+                </div>
+                
+                <div id="quizResults" class="quiz-results" style="display: none;">
+                    <h3>Assessment Complete!</h3>
+                    <div class="result-score">
+                        <span class="score-number" id="finalScore">100%</span>
+                        <span class="score-label">Final Score</span>
+                    </div>
+                    <div id="resultFeedback" class="result-feedback">
+                        <p>Excellent work! You've demonstrated a thorough understanding of pre-trip inspection procedures.</p>
+                    </div>
+                    <button class="btn btn--primary" id="viewCertificate">View Certificate</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certificate View -->
+    <section id="certificate" class="view">
+        <div class="container">
+            <div class="certificate-container">
+                <button class="back-btn" data-view="student">← Back to Dashboard</button>
+                <div class="certificate">
+                    <div class="certificate-header">
+                        <h1>Certificate of Completion</h1>
+                        <div class="certificate-logo">🏆</div>
+                    </div>
+                    <div class="certificate-body">
+                        <p class="certificate-text">This certifies that</p>
+                        <h2 class="certificate-name">Sipho Mthembu</h2>
+                        <p class="certificate-text">has successfully completed the course</p>
+                        <h3 class="certificate-course">Pre-Trip Inspection Fundamentals</h3>
+                        <p class="certificate-details">
+                            Completed on: <strong>August 20, 2025</strong><br>
+                            Score: <strong>100%</strong><br>
+                            Valid until: <strong>August 20, 2027</strong>
+                        </p>
+                    </div>
+                    <div class="certificate-footer">
+                        <div class="signature-section">
+                            <div class="signature">
+                                <div class="signature-line"></div>
+                                <p>Takatso Mokoena<br>Training Manager<br>Litsamaiso Pty Ltd</p>
+                            </div>
+                        </div>
+                        <div class="certificate-seal">
+                            <div class="seal">CERTIFIED</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="certificate-actions">
+                    <button class="btn btn--primary">Download PDF</button>
+                    <button class="btn btn--outline">Print Certificate</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Manager Dashboard -->
+    <section id="manager" class="view">
+        <div class="container">
+            <div class="manager-header">
+                <div class="manager-info">
+                    <h2>Training Management Dashboard</h2>
+                    <p>Takatso Mokoena - Training Manager</p>
+                </div>
+                <div class="date-filter">
+                    <select class="form-control">
+                        <option>Last 30 days</option>
+                        <option>Last 90 days</option>
+                        <option>Last year</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="analytics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">👥</div>
+                    <div class="metric-content">
+                        <h3>245</h3>
+                        <p>Total Drivers</p>
+                        <span class="metric-change positive">+12 this month</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">✅</div>
+                    <div class="metric-content">
+                        <h3>191</h3>
+                        <p>Completed Training</p>
+                        <span class="metric-change positive">+18 this week</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">📊</div>
+                    <div class="metric-content">
+                        <h3>78%</h3>
+                        <p>Compliance Rate</p>
+                        <span class="metric-change neutral">↔ No change</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">⚠️</div>
+                    <div class="metric-content">
+                        <h3>12</h3>
+                        <p>Overdue Training</p>
+                        <span class="metric-change negative">Requires attention</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-sections">
+                <div class="section">
+                    <h3>Training Progress Overview</h3>
+                    <div class="chart-container" style="position: relative; height: 300px;">
+                        <canvas id="progressChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>Recent Activity</h3>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon">✅</div>
+                            <div class="activity-content">
+                                <p><strong>Sipho Mthembu</strong> completed Pre-Trip Inspection Assessment</p>
+                                <span class="activity-time">2 hours ago</span>
+                            </div>
+                            <div class="activity-score">Score: 100%</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">📚</div>
+                            <div class="activity-content">
+                                <p><strong>Nomsa Dlamini</strong> started Pre-Trip Inspection course</p>
+                                <span class="activity-time">1 day ago</span>
+                            </div>
+                            <div class="activity-score">Progress: 45%</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">⚠️</div>
+                            <div class="activity-content">
+                                <p><strong>System Alert:</strong> 12 drivers have overdue training</p>
+                                <span class="activity-time">3 days ago</span>
+                            </div>
+                            <div class="activity-score">Action needed</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>Compliance Tracking</h3>
+                    <div class="compliance-grid">
+                        <div class="compliance-item">
+                            <h4>Pre-Trip Inspections</h4>
+                            <div class="compliance-bar">
+                                <div class="compliance-fill" style="width: 78%"></div>
+                            </div>
+                            <span>78% Compliant</span>
+                        </div>
+                        <div class="compliance-item">
+                            <h4>Safety Training</h4>
+                            <div class="compliance-bar">
+                                <div class="compliance-fill" style="width: 65%"></div>
+                            </div>
+                            <span>65% Compliant</span>
+                        </div>
+                        <div class="compliance-item">
+                            <h4>Certificate Renewals</h4>
+                            <div class="compliance-bar">
+                                <div class="compliance-fill warning" style="width: 45%"></div>
+                            </div>
+                            <span>45% Up to Date</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="app.js"></script>
+</body>
+</html>
