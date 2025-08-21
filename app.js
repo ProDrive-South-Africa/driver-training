@@ -108,7 +108,7 @@ function initializeApp() {
   
   // Show welcome notification
   setTimeout(() => {
-    showNotification('Welcome to the Rea Vaya Training System!', 'success');
+    showNotification('Welcome to the Rea Vaya Training System demo!', 'success');
   }, 1000);
   
   console.log('App initialized successfully');
