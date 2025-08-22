@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fleet Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1 class="header__title">Fleet Management System</h1>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav__tabs">
+                <button class="nav__tab active" data-section="dashboard">Dashboard</button>
+                <button class="nav__tab" data-section="drivers">Drivers</button>
+                <button class="nav__tab" data-section="licenses">Licenses</button>
+                <button class="nav__tab" data-section="vehicles">Vehicles</button>
+                <button class="nav__tab" data-section="courses">Courses</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <h2>Dashboard Overview</h2>
+                <div class="dashboard-grid">
+                    <div class="card dashboard-card" data-navigate="drivers">
+                        <div class="card__body">
+                            <div class="dashboard-card__header">
+                                <h3>Drivers</h3>
+                                <div class="dashboard-card__icon">👤</div>
+                            </div>
+                            <div class="dashboard-card__metric">
+                                <span class="dashboard-card__number" id="total-drivers">0</span>
+                                <span class="dashboard-card__label">Total Drivers</span>
+                            </div>
+                            <div class="dashboard-card__detail">
+                                <span class="status status--success" id="compliant-drivers">0% Compliant</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card dashboard-card" data-navigate="licenses">
+                        <div class="card__body">
+                            <div class="dashboard-card__header">
+                                <h3>Licenses</h3>
+                                <div class="dashboard-card__icon">📄</div>
+                            </div>
+                            <div class="dashboard-card__metric">
+                                <span class="dashboard-card__number" id="total-licenses">0</span>
+                                <span class="dashboard-card__label">Active Licenses</span>
+                            </div>
+                            <div class="dashboard-card__detail">
+                                <span class="status status--warning" id="expiring-licenses">0 Expiring Soon</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card dashboard-card" data-navigate="vehicles">
+                        <div class="card__body">
+                            <div class="dashboard-card__header">
+                                <h3>Vehicles</h3>
+                                <div class="dashboard-card__icon">🚐</div>
+                            </div>
+                            <div class="dashboard-card__metric">
+                                <span class="dashboard-card__number" id="total-vehicles">0</span>
+                                <span class="dashboard-card__label">Total Vehicles</span>
+                            </div>
+                            <div class="dashboard-card__detail">
+                                <span class="status status--info" id="inspection-status">All Inspected</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card dashboard-card" data-navigate="courses">
+                        <div class="card__body">
+                            <div class="dashboard-card__header">
+                                <h3>Courses</h3>
+                                <div class="dashboard-card__icon">📚</div>
+                            </div>
+                            <div class="dashboard-card__metric">
+                                <span class="dashboard-card__number" id="total-courses">0</span>
+                                <span class="dashboard-card__label">Available Courses</span>
+                            </div>
+                            <div class="dashboard-card__detail">
+                                <span class="status status--info" id="required-courses">0 Required</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Drivers Section -->
+            <section id="drivers" class="section">
+                <div class="section-header">
+                    <h2>Drivers Management</h2>
+                    <div class="section-controls">
+                        <input type="text" class="form-control search-input" placeholder="Search drivers..." id="drivers-search">
+                        <button class="btn btn--primary" id="add-driver-btn">Add Driver</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="drivers-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Licenses</th>
+                                <th>Compliance</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="drivers-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Licenses Section -->
+            <section id="licenses" class="section">
+                <div class="section-header">
+                    <h2>Licenses Management</h2>
+                    <div class="section-controls">
+                        <input type="text" class="form-control search-input" placeholder="Search licenses..." id="licenses-search">
+                        <button class="btn btn--primary" id="add-license-btn">Add License</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="licenses-table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Number</th>
+                                <th>Driver</th>
+                                <th>Issue Date</th>
+                                <th>Expiry Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="licenses-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Vehicles Section -->
+            <section id="vehicles" class="section">
+                <div class="section-header">
+                    <h2>Vehicles Management</h2>
+                    <div class="section-controls">
+                        <input type="text" class="form-control search-input" placeholder="Search vehicles..." id="vehicles-search">
+                        <button class="btn btn--primary" id="add-vehicle-btn">Add Vehicle</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="vehicles-table">
+                        <thead>
+                            <tr>
+                                <th>Make/Model</th>
+                                <th>Year</th>
+                                <th>Plate Number</th>
+                                <th>Last Inspection</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vehicles-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Courses Section -->
+            <section id="courses" class="section">
+                <div class="section-header">
+                    <h2>Courses Management</h2>
+                    <div class="section-controls">
+                        <input type="text" class="form-control search-input" placeholder="Search courses..." id="courses-search">
+                        <button class="btn btn--primary" id="add-course-btn">Add Course</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="courses-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Duration (hrs)</th>
+                                <th>Required</th>
+                                <th>Enrolled</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="courses-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Modal for Forms -->
+    <div class="modal hidden" id="form-modal">
+        <div class="modal__backdrop" id="modal-backdrop"></div>
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3 id="modal-title">Add Item</h3>
+                <button class="modal__close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal__body">
+                <form id="item-form">
+                    <div id="form-fields"></div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn--outline" id="cancel-btn">Cancel</button>
+                        <button type="submit" class="btn btn--primary" id="submit-btn">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal hidden" id="confirm-modal">
+        <div class="modal__backdrop"></div>
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3>Confirm Action</h3>
+            </div>
+            <div class="modal__body">
+                <p id="confirm-message">Are you sure you want to delete this item?</p>
+                <div class="form-actions">
+                    <button type="button" class="btn btn--outline" id="confirm-cancel">Cancel</button>
+                    <button type="button" class="btn btn--primary" id="confirm-delete">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="notification hidden" id="notification">
+        <span id="notification-message"></span>
+        <button class="notification__close" id="notification-close">&times;</button>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
