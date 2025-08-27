@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Inspection Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-brand">
+                    <h1>Inspection System</h1>
+                    <p class="header-tagline">Professional Fleet Management & Compliance</p>
+                </div>
+                <div class="header-info">
+                    <div class="date-time">
+                        <span class="current-date" id="currentDate"></span>
+                        <span class="current-time" id="currentTime"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Page View -->
+        <section id="homePage" class="home-page">
+            <div class="container">
+                <!-- Hero Section -->
+                <div class="hero-section">
+                    <div class="hero-content">
+                        <h1>Fleet Inspection Management</h1>
+                        <p class="hero-description">Comprehensive vehicle safety monitoring and compliance tracking for professional fleet operations.</p>
+                        <button class="btn btn--primary btn--lg" id="accessDashboardBtn">
+                            Access Inspection Dashboard
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Fleet Overview Cards -->
+                <div class="overview-grid">
+                    <div class="overview-card">
+                        <div class="card-icon">🚛</div>
+                        <div class="card-stats">
+                            <h3>25</h3>
+                            <p>Total Vehicles</p>
+                        </div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="card-icon">✅</div>
+                        <div class="card-stats">
+                            <h3>12</h3>
+                            <p>Inspections Today</p>
+                        </div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="card-icon">⚠️</div>
+                        <div class="card-stats">
+                            <h3>26</h3>
+                            <p>Outstanding Issues</p>
+                        </div>
+                    </div>
+                    <div class="overview-card">
+                        <div class="card-icon">📊</div>
+                        <div class="card-stats">
+                            <h3>98.5%</h3>
+                            <p>Compliance Rate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard View -->
+        <section id="dashboard" class="dashboard hidden">
+            <div class="container">
+                <!-- Dashboard Header -->
+                <div class="dashboard-header">
+                    <h2>Inspection Dashboard</h2>
+                    <button class="btn btn--outline back-btn" id="backToHomeBtn">← Back to Home</button>
+                </div>
+
+                <!-- Fleet Status Overview -->
+                <div class="fleet-status">
+                    <h3>Fleet Status Overview</h3>
+                    <div class="status-grid">
+                        <div class="status-card available">
+                            <div class="status-number">22</div>
+                            <div class="status-label">Available</div>
+                        </div>
+                        <div class="status-card in-service">
+                            <div class="status-number">2</div>
+                            <div class="status-label">In Service</div>
+                        </div>
+                        <div class="status-card maintenance">
+                            <div class="status-number">1</div>
+                            <div class="status-label">Maintenance</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Outstanding Issues Summary -->
+                <div class="issues-summary-dashboard">
+                    <h3>Priority Issues</h3>
+                    <div class="priority-grid">
+                        <div class="priority-card critical">
+                            <div class="priority-number">3</div>
+                            <div class="priority-label">Critical</div>
+                        </div>
+                        <div class="priority-card medium">
+                            <div class="priority-number">8</div>
+                            <div class="priority-label">Medium</div>
+                        </div>
+                        <div class="priority-card low">
+                            <div class="priority-number">15</div>
+                            <div class="priority-label">Low</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Inspections -->
+                <div class="recent-inspections-dashboard">
+                    <div class="section-header">
+                        <h3>Recent Inspections</h3>
+                        <button class="btn btn--primary" id="startNewInspectionBtn">Start New Inspection</button>
+                    </div>
+                    <div class="inspections-table">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Inspection ID</th>
+                                    <th>Vehicle</th>
+                                    <th>Type</th>
+                                    <th>Inspector</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Issues</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentInspectionsTable">
+                                <!-- Populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Inspection Management Page -->
+        <section id="inspectionManagement" class="inspection-management hidden">
+            <div class="container">
+                <!-- Management Header -->
+                <div class="management-header">
+                    <h2>Inspection Management</h2>
+                    <button class="btn btn--outline back-btn" id="backToDashboardBtn">← Back to Dashboard</button>
+                </div>
+
+                <!-- Driver & Vehicle Selection -->
+                <div class="driver-vehicle-section">
+                    <h3>Driver & Vehicle Information</h3>
+                    <div class="selection-grid">
+                        <div class="form-group">
+                            <label class="form-label required" for="driverName">Driver Name</label>
+                            <input type="text" id="driverName" class="form-control" value="Dave Inspector" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required" for="licenseNumber">License Number</label>
+                            <input type="text" id="licenseNumber" class="form-control" value="D1234567" placeholder="Enter license number" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required" for="employeeId">Employee ID</label>
+                            <input type="text" id="employeeId" class="form-control" value="E123456" placeholder="Enter employee ID" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required" for="vehicleSelect">Select Vehicle</label>
+                            <select id="vehicleSelect" class="form-control" required>
+                                <option value="">Choose a vehicle</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="vehicle-info" id="vehicleInfo" style="display: none;">
+                        <div class="vehicle-details">
+                            <h4>Selected Vehicle Details</h4>
+                            <div class="vehicle-meta" id="vehicleMeta"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inspection Types -->
+                <div class="inspection-types">
+                    <h3>Select Inspection Type</h3>
+                    <div class="inspection-grid">
+                        <div class="inspection-card" data-type="preTrip">
+                            <div class="inspection-card__icon">🔍</div>
+                            <h4 class="inspection-card__title">Pre-Trip Inspection</h4>
+                            <p class="inspection-card__description">Mandatory inspection before vehicle operation</p>
+                            <div class="inspection-card__meta">
+                                <span class="time-estimate">15-20 minutes</span>
+                                <span class="legal-required">Legally Required</span>
+                            </div>
+                            <button class="btn btn--primary" id="startPreTripBtn" disabled>Start Pre-Trip</button>
+                        </div>
+
+                        <div class="inspection-card" data-type="tripMonitoring">
+                            <div class="inspection-card__icon">📍</div>
+                            <h4 class="inspection-card__title">Trip Monitoring</h4>
+                            <p class="inspection-card__description">Active journey monitoring and safety checks</p>
+                            <div class="inspection-card__meta">
+                                <span class="time-estimate">5 min per check</span>
+                                <span class="check-interval">Every 2 hours</span>
+                            </div>
+                            <button class="btn btn--primary" id="startTripMonitoringBtn" disabled>Start Monitoring</button>
+                        </div>
+
+                        <div class="inspection-card" data-type="postTrip">
+                            <div class="inspection-card__icon">📋</div>
+                            <h4 class="inspection-card__title">Post-Trip Inspection</h4>
+                            <p class="inspection-card__description">End journey completion and defect reporting</p>
+                            <div class="inspection-card__meta">
+                                <span class="time-estimate">10-15 minutes</span>
+                                <span class="legal-required">DVIR Required</span>
+                            </div>
+                            <button class="btn btn--primary" id="startPostTripBtn" disabled>Start Post-Trip</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Inspection Form View -->
+        <section id="inspectionForm" class="inspection-form hidden">
+            <div class="container">
+                <div class="form-header">
+                    <button class="btn btn--outline back-btn" id="backBtn">← Back to Management</button>
+                    <div class="form-title">
+                        <h2 id="formTitle">Vehicle Inspection</h2>
+                        <div class="inspection-meta">
+                            <span id="vehicleInfo">Vehicle: <span id="currentVehicleId"></span></span>
+                            <span id="driverInfo">Driver: <span id="currentDriverName"></span></span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                            <span class="progress-text" id="progressText">0% Complete</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-content">
+                    <div class="form-sections" id="formSections">
+                        <!-- Dynamic form content -->
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn btn--secondary" id="saveProgressBtn">Save Progress</button>
+                        <button class="btn btn--primary" id="nextSectionBtn">Next Section</button>
+                        <button class="btn btn--primary hidden" id="submitInspectionBtn">Complete Inspection</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Issues Summary View -->
+        <section id="issuesSummary" class="issues-summary hidden">
+            <div class="container">
+                <div class="summary-header">
+                    <button class="btn btn--outline" id="backToFormBtn">← Back to Form</button>
+                    <h2>Inspection Results & Issues</h2>
+                </div>
+
+                <div class="issues-content">
+                    <div class="inspection-status" id="inspectionStatus">
+                        <!-- Status summary will be populated -->
+                    </div>
+                    <div class="issues-list" id="issuesList">
+                        <!-- Issues will be populated by JavaScript -->
+                    </div>
+                    <div class="issues-actions">
+                        <button class="btn btn--secondary" id="flagVehicleBtn">Flag Vehicle Out of Service</button>
+                        <button class="btn btn--primary" id="generateReportBtn">Generate DVIR Report</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Report View -->
+        <section id="reportView" class="report-view hidden">
+            <div class="container">
+                <div class="report-header">
+                    <button class="btn btn--outline" id="backToSummaryBtn">← Back to Issues</button>
+                    <h2>Driver Vehicle Inspection Report (DVIR)</h2>
+                    <div class="report-actions">
+                        <button class="btn btn--secondary" id="exportPdfBtn">Export PDF</button>
+                        <button class="btn btn--secondary" id="emailReportBtn">Email Report</button>
+                        <button class="btn btn--primary" id="newInspectionBtn">New Inspection</button>
+                    </div>
+                </div>
+
+                <div class="report-content" id="reportContent">
+                    <!-- Report content will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Photo Upload Modal -->
+    <div id="photoModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Inspection Photos</h3>
+                <button class="modal-close" id="closePhotoModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="photo-upload-area" id="photoUploadArea">
+                    <input type="file" id="photoInput" accept="image/*" multiple>
+                    <div class="upload-placeholder">
+                        <span class="upload-icon">📷</span>
+                        <p>Click to select photos or drag and drop</p>
+                        <small>Supports JPG, PNG up to 10MB each</small>
+                    </div>
+                </div>
+                <div class="photo-preview" id="photoPreview">
+                    <!-- Photo previews will be shown here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--secondary" id="cancelPhotoBtn">Cancel</button>
+                <button class="btn btn--primary" id="addPhotosBtn">Add Photos</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast hidden">
+        <span id="toastMessage"></span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
