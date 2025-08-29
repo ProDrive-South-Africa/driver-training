@@ -1,6 +1,6 @@
-const { useState, useEffect, useMemo } = React;
+const { useState, useEffect, useRef, useMemo } = React;
 
-// Initial data from Rea Vaya BRT system
+// Initial Rea Vaya BRT data
 const initialData = {
   drivers: [
     {
@@ -275,9 +275,40 @@ const initialData = {
       message: "Pieter Botha has overdue training (due: 2024-09-30)",
       priority: "critical"
     }
+  ],
+  stations: [
+    {
+      id: 1,
+      name: "Thokoza Park",
+      phase: "Phase 1A",
+      facilities: ["WiFi", "Wheelchair Access", "Digital Displays"],
+      status: "Operational"
+    },
+    {
+      id: 2,
+      name: "Lakeview",
+      phase: "Phase 1C",
+      facilities: ["WiFi", "Wheelchair Access"],
+      status: "Operational"
+    },
+    {
+      id: 3,
+      name: "Klipspruit Valley",
+      phase: "Phase 1B",
+      facilities: ["WiFi", "Wheelchair Access", "Ticket Office"],
+      status: "Operational"
+    },
+    {
+      id: 4,
+      name: "Boomertown",
+      phase: "Phase 1B",
+      facilities: ["WiFi", "Wheelchair Access"],
+      status: "Under Maintenance"
+    }
   ]
 };
 
+// Language configuration
 const languages = [
   { code: "en", name: "English" },
   { code: "af", name: "Afrikaans" },
@@ -285,14 +316,119 @@ const languages = [
   { code: "xh", name: "isiXhosa" }
 ];
 
+const translations = {
+  en: {
+    appTitle: "Rea Vaya Bus Rapid Transit",
+    appSubtitle: "Fleet Management System",
+    dashboard: "Dashboard",
+    drivers: "Bus Drivers",
+    licenses: "PrDP Licenses",
+    buses: "Bus Fleet",
+    routes: "Routes & Stations",
+    activeDrivers: "Active Bus Drivers",
+    validLicenses: "Valid PrDP Licenses",
+    activeBuses: "Active Buses in Fleet",
+    pendingInspections: "Pending Bus Inspections",
+    recentInspections: "Recent Bus Inspections",
+    complianceAlerts: "Route Compliance Alerts",
+    searchDrivers: "Search drivers...",
+    searchLicenses: "Search licenses...",
+    searchBuses: "Search buses...",
+    searchRoutes: "Search routes...",
+    addDriver: "Add Driver",
+    addLicense: "Add License",
+    addBus: "Add Bus",
+    addRoute: "Add Route",
+    lightTheme: "Light",
+    darkTheme: "Dark"
+  },
+  af: {
+    appTitle: "Rea Vaya Bus Vinnige Vervoer",
+    appSubtitle: "Vloot Bestuur Stelsel",
+    dashboard: "Dashboard",
+    drivers: "Bus Bestuurders",
+    licenses: "PrDP Lisensies",
+    buses: "Bus Vloot",
+    routes: "Roetes & Stasies",
+    activeDrivers: "Aktiewe Bus Bestuurders",
+    validLicenses: "Geldige PrDP Lisensies",
+    activeBuses: "Aktiewe Busse in Vloot",
+    pendingInspections: "Hangende Bus Inspeksies",
+    recentInspections: "Onlangse Bus Inspeksies",
+    complianceAlerts: "Roete Nakoming Waarskuwings",
+    searchDrivers: "Soek bestuurders...",
+    searchLicenses: "Soek lisensies...",
+    searchBuses: "Soek busse...",
+    searchRoutes: "Soek roetes...",
+    addDriver: "Voeg Bestuurder By",
+    addLicense: "Voeg Lisensie By",
+    addBus: "Voeg Bus By",
+    addRoute: "Voeg Roete By",
+    lightTheme: "Lig",
+    darkTheme: "Donker"
+  },
+  zu: {
+    appTitle: "Rea Vaya Ibhasi Lezokuthutha Ngokushesha",
+    appSubtitle: "Uhlelo Lokuphatha Imoto",
+    dashboard: "Dashboard",
+    drivers: "Abashayeli Bebhasi",
+    licenses: "Amalayisense e-PrDP",
+    buses: "Imibhasi",
+    routes: "Imizila Neziteshi",
+    activeDrivers: "Abashayeli Bebhasi Abasebenzayo",
+    validLicenses: "Amalayisense e-PrDP Asebenzayo",
+    activeBuses: "Amabhasi Asebenzayo Emibhasini",
+    pendingInspections: "Ukuhlolwa Kwamabhasi Okulindelayo",
+    recentInspections: "Ukuhlolwa Kwamabhasi Kwakamuva",
+    complianceAlerts: "Izexwayiso Zokuhambisana Nomzila",
+    searchDrivers: "Sesha abashayeli...",
+    searchLicenses: "Sesha amalayisense...",
+    searchBuses: "Sesha amabhasi...",
+    searchRoutes: "Sesha imizila...",
+    addDriver: "Engeza Umshayeli",
+    addLicense: "Engeza Ilayisense",
+    addBus: "Engeza Ibhasi",
+    addRoute: "Engeza Umzila",
+    lightTheme: "Okukhanyayo",
+    darkTheme: "Okumnyama"
+  },
+  xh: {
+    appTitle: "Rea Vaya Ibhasi Yothutho Olukhawulezayo",
+    appSubtitle: "Inkqubo Yolawulo Lwenqwelo",
+    dashboard: "Dashboard",
+    drivers: "Abaqhubi Bebhasi",
+    licenses: "Iilayisensi ze-PrDP",
+    buses: "Iibhasi",
+    routes: "Iindlela Nezikhululo",
+    activeDrivers: "Abaqhubi Bebhasi Abasebenzayo",
+    validLicenses: "Iilayisensi ze-PrDP Ezisebenzayo",
+    activeBuses: "Iibhasi Ezisebenzayo Kwinqwelo",
+    pendingInspections: "Ukuhlolwa Kweebhasi Okulindwayo",
+    recentInspections: "Ukuhlolwa Kweebhasi Kwamva Nje",
+    complianceAlerts: "Izilumkiso Zokuthobela Indlela",
+    searchDrivers: "Khangela abaqhubi...",
+    searchLicenses: "Khangela iilayisensi...",
+    searchBuses: "Khangela iibhasi...",
+    searchRoutes: "Khangela iindlela...",
+    addDriver: "Yongeza Umqhubi",
+    addLicense: "Yongeza Ilayisensi",
+    addBus: "Yongeza Ibhasi",
+    addRoute: "Yongeza Indlela",
+    lightTheme: "Ukukhanya",
+    darkTheme: "Ubumnyama"
+  }
+};
+
 // Utility Components
-const StatusBadge = ({ status, type = 'default' }) => {
+const StatusBadge = ({ status }) => {
   const getStatusClass = () => {
-    switch (status?.toLowerCase()) {
+    const statusLower = status?.toLowerCase();
+    switch (statusLower) {
       case 'active':
       case 'valid':
       case 'valid prdp':
       case 'passed':
+      case 'operational':
       case 'in service':
         return 'status-badge--active';
       case 'inactive':
@@ -300,18 +436,18 @@ const StatusBadge = ({ status, type = 'default' }) => {
       case 'prdp expired':
       case 'failed':
       case 'out of service':
-      case 'on leave':
         return 'status-badge--inactive';
       case 'expiring soon':
       case 'prdp expiring soon':
-      case 'expiring':
-      case 'in workshop':
-      case 'maintenance':
-      case 'issues found':
       case 'renewal due':
+      case 'in workshop':
+      case 'issues found':
+      case 'under maintenance':
         return 'status-badge--warning';
+      case 'on leave':
+        return 'status-badge--leave';
       case 'unassigned':
-        return 'status-badge--info';
+        return 'status-badge--unassigned';
       default:
         return 'status-badge--info';
     }
@@ -324,35 +460,121 @@ const StatusBadge = ({ status, type = 'default' }) => {
   );
 };
 
-const Modal = ({ isOpen, onClose, title, children }) => {
-  if (!isOpen) return null;
-  
+// Language Selector Component
+const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const currentLang = languages.find(lang => lang.code === currentLanguage) || languages[0];
+
+  // Handle click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+
+  const toggleDropdown = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsOpen(prev => !prev);
+  };
+
+  const handleLanguageSelect = (e, langCode) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onLanguageChange(langCode);
+    setIsOpen(false);
+  };
+
   return (
-    <div className="modal">
-      <div className="modal__content">
-        <div className="modal__header">
-          <h2 className="modal__title">{title}</h2>
-          <button className="modal__close" onClick={onClose}>×</button>
-        </div>
-        {children}
+    <div className="language-selector" ref={dropdownRef}>
+      <button 
+        className={`language-selector__button ${isOpen ? 'language-selector__button--open' : ''}`}
+        onClick={toggleDropdown}
+        type="button"
+      >
+        <span>{currentLang.name}</span>
+        <span className={`language-selector__arrow ${isOpen ? 'language-selector__arrow--open' : ''}`}>
+          ▼
+        </span>
+      </button>
+      
+      <div className={`language-selector__dropdown ${isOpen ? 'language-selector__dropdown--open' : ''}`}>
+        {languages.map(lang => (
+          <div
+            key={lang.code}
+            className={`language-selector__option ${
+              lang.code === currentLanguage ? 'language-selector__option--active' : ''
+            }`}
+            onClick={(e) => handleLanguageSelect(e, lang.code)}
+          >
+            {lang.name}
+          </div>
+        ))}
       </div>
     </div>
   );
 };
 
-// Theme Context
-const ThemeToggle = ({ theme, onToggle }) => {
+// Theme Switcher Component
+const ThemeSwitcher = ({ theme, onThemeChange, t }) => {
+  const toggleTheme = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    onThemeChange(newTheme);
+  };
+
   return (
-    <div className="theme-switcher">
-      <span className="theme-label">☀️</span>
-      <button 
-        className="theme-toggle" 
-        onClick={onToggle}
-        aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-      >
-        <div className="theme-toggle__thumb"></div>
-      </button>
-      <span className="theme-label">🌙</span>
+    <button className="theme-switcher" onClick={toggleTheme} type="button">
+      <span className="theme-switcher__icon">
+        {theme === 'light' ? '🌙' : '☀️'}
+      </span>
+      <span>{theme === 'light' ? t.darkTheme : t.lightTheme}</span>
+    </button>
+  );
+};
+
+// Modal Component
+const Modal = ({ isOpen, onClose, title, children }) => {
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    }
+    
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className={`modal`} onClick={(e) => e.target === e.currentTarget && onClose()}>
+      <div className="modal__content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal__header">
+          <h2 className="modal__title">{title}</h2>
+          <button className="modal__close" onClick={onClose} type="button">×</button>
+        </div>
+        {children}
+      </div>
     </div>
   );
 };
@@ -362,7 +584,6 @@ const App = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
   const [language, setLanguage] = useState('en');
   const [theme, setTheme] = useState('light');
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [data, setData] = useState(initialData);
   const [searchTerms, setSearchTerms] = useState({
     drivers: '',
@@ -378,13 +599,23 @@ const App = () => {
   });
   const [editingItem, setEditingItem] = useState(null);
 
-  // Theme management
+  const t = translations[language] || translations.en;
+
+  // Apply theme to document
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  const handleThemeChange = (newTheme) => {
+    setTheme(newTheme);
+  };
+
+  const handleLanguageChange = (langCode) => {
+    setLanguage(langCode);
+  };
+
+  const handleNavigation = (section) => {
+    setActiveSection(section);
   };
 
   const openModal = (modalName, item = null) => {
@@ -431,82 +662,71 @@ const App = () => {
   const dashboardStats = useMemo(() => {
     const activeDrivers = data.drivers.filter(d => d.status === 'Active').length;
     const validLicenses = data.licenses.filter(l => l.status === 'Valid').length;
-    const activeBuses = data.buses.filter(b => b.status === 'In Service').length;
-    const criticalAlerts = data.complianceAlerts.filter(a => a.priority === 'critical').length;
+    const activeBuses = data.buses.filter(v => v.status === 'In Service').length;
+    const pendingInspections = data.buses.filter(v => 
+      new Date(v.nextInspection) <= new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+    ).length;
 
     return {
       activeDrivers,
       validLicenses,
       activeBuses,
-      criticalAlerts
+      pendingInspections
     };
   }, [data]);
 
   // Header Component
   const Header = () => {
     const navItems = [
-      { key: 'dashboard', label: 'Dashboard' },
-      { key: 'drivers', label: 'Drivers' },
-      { key: 'licenses', label: 'Licenses' },
-      { key: 'buses', label: 'Buses' },
-      { key: 'routes', label: 'Routes' }
+      { key: 'dashboard', label: t.dashboard },
+      { key: 'drivers', label: t.drivers },
+      { key: 'licenses', label: t.licenses },
+      { key: 'buses', label: t.buses },
+      { key: 'routes', label: t.routes }
     ];
 
     return (
       <header className="header">
-        <div className="header__left">
-          <a 
-            href="#" 
-            className="header__logo"
-            onClick={(e) => {
-              e.preventDefault();
-              setActiveSection('dashboard');
-            }}
+        <div className="header__container">
+          <div 
+            className="header__brand" 
+            onClick={() => handleNavigation('dashboard')}
           >
-            Rea Vaya Bus Rapid Transit
-          </a>
-          
-          <nav className={`header__nav ${mobileNavOpen ? 'open' : ''}`}>
-            {navItems.map(item => (
-              <div key={item.key} className="header__nav-item">
-                <a
-                  href="#"
-                  className={`header__nav-link ${activeSection === item.key ? 'header__nav-link--active' : ''}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setActiveSection(item.key);
-                    setMobileNavOpen(false);
-                  }}
-                >
-                  {item.label}
-                </a>
-              </div>
-            ))}
-          </nav>
-        </div>
-
-        <div className="header__right">
-          <ThemeToggle theme={theme} onToggle={toggleTheme} />
-          
-          <div className="language-selector">
-            <select 
-              value={language} 
-              onChange={(e) => setLanguage(e.target.value)}
-            >
-              {languages.map(lang => (
-                <option key={lang.code} value={lang.code}>
-                  {lang.name}
-                </option>
-              ))}
-            </select>
+            <h1 className="header__logo">{t.appTitle}</h1>
+            <p className="header__tagline">{t.appSubtitle}</p>
           </div>
+          
+          <nav className="nav">
+            <ul className="nav__list">
+              {navItems.map(item => (
+                <li key={item.key} className="nav__item">
+                  <a
+                    href="#"
+                    className={`nav__link ${activeSection === item.key ? 'nav__link--active' : ''}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleNavigation(item.key);
+                    }}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-          <button 
-            className="mobile-nav-toggle"
-            onClick={() => setMobileNavOpen(!mobileNavOpen)}
-          >
-            ☰
-          </button>
+          <div className="header__controls">
+            <ThemeSwitcher 
+              theme={theme} 
+              onThemeChange={handleThemeChange} 
+              t={t}
+            />
+            <LanguageSelector 
+              currentLanguage={language}
+              onLanguageChange={handleLanguageChange}
+            />
+          </div>
         </div>
       </header>
     );
@@ -516,46 +736,50 @@ const App = () => {
   const Dashboard = () => (
     <div>
       <div className="page-header">
-        <h1 className="page-title">Dashboard</h1>
+        <h1 className="page-title">{t.dashboard}</h1>
       </div>
       
       <div className="dashboard__grid">
         <div className="summary-card">
           <div className="summary-card__header">
-            <span className="summary-card__title">Active Drivers</span>
+            <span className="summary-card__title">{t.activeDrivers}</span>
             <span className="summary-card__icon">👥</span>
           </div>
           <div className="summary-card__value">{dashboardStats.activeDrivers}</div>
+          <div className="summary-card__subtitle">Professional drivers with valid PrDP</div>
         </div>
         
         <div className="summary-card">
           <div className="summary-card__header">
-            <span className="summary-card__title">Valid Licenses</span>
+            <span className="summary-card__title">{t.validLicenses}</span>
             <span className="summary-card__icon">📄</span>
           </div>
           <div className="summary-card__value">{dashboardStats.validLicenses}</div>
+          <div className="summary-card__subtitle">Current valid professional permits</div>
         </div>
         
         <div className="summary-card">
           <div className="summary-card__header">
-            <span className="summary-card__title">Active Buses</span>
+            <span className="summary-card__title">{t.activeBuses}</span>
             <span className="summary-card__icon">🚌</span>
           </div>
           <div className="summary-card__value">{dashboardStats.activeBuses}</div>
+          <div className="summary-card__subtitle">Buses currently in service</div>
         </div>
         
         <div className="summary-card">
           <div className="summary-card__header">
-            <span className="summary-card__title">Critical Alerts</span>
-            <span className="summary-card__icon">⚠️</span>
+            <span className="summary-card__title">{t.pendingInspections}</span>
+            <span className="summary-card__icon">🔧</span>
           </div>
-          <div className="summary-card__value">{dashboardStats.criticalAlerts}</div>
+          <div className="summary-card__value">{dashboardStats.pendingInspections}</div>
+          <div className="summary-card__subtitle">Due within next 30 days</div>
         </div>
       </div>
 
       <div className="content-section">
         <div className="section-header">
-          <h2 className="section-title">Recent Inspections</h2>
+          <h2 className="section-title">{t.recentInspections}</h2>
         </div>
         <table className="data-table">
           <thead>
@@ -564,8 +788,8 @@ const App = () => {
               <th>Driver</th>
               <th>Date</th>
               <th>Type</th>
-              <th>Status</th>
               <th>Route</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -575,8 +799,8 @@ const App = () => {
                 <td>{inspection.driverName}</td>
                 <td>{inspection.inspectionDate}</td>
                 <td>{inspection.inspectionType}</td>
-                <td><StatusBadge status={inspection.status} /></td>
                 <td>{inspection.route}</td>
+                <td><StatusBadge status={inspection.status} /></td>
               </tr>
             ))}
           </tbody>
@@ -585,14 +809,14 @@ const App = () => {
 
       <div className="content-section">
         <div className="section-header">
-          <h2 className="section-title">Compliance Alerts</h2>
+          <h2 className="section-title">{t.complianceAlerts}</h2>
         </div>
         <div className="alert-list">
           {data.complianceAlerts.map((alert, index) => (
             <div key={index} className={`alert-item alert-item--${alert.priority}`}>
               <span className="alert-icon">
                 {alert.priority === 'critical' ? '🚨' : 
-                 alert.priority === 'warning' ? '⚡' : 'ℹ️'}
+                 alert.priority === 'warning' ? '⚠️' : 'ℹ️'}
               </span>
               <p className="alert-message">{alert.message}</p>
             </div>
@@ -661,16 +885,6 @@ const App = () => {
             />
           </div>
           <div className="form-group">
-            <label className="form-label">Phone</label>
-            <input
-              type="tel"
-              className="form-control"
-              value={formData.phone}
-              onChange={(e) => setFormData({...formData, phone: e.target.value})}
-              required
-            />
-          </div>
-          <div className="form-group">
             <label className="form-label">Email</label>
             <input
               type="email"
@@ -693,88 +907,17 @@ const App = () => {
             </select>
           </div>
           <div className="form-group">
-            <label className="form-label">License Status</label>
-            <select
-              className="form-control"
-              value={formData.licenseStatus}
-              onChange={(e) => setFormData({...formData, licenseStatus: e.target.value})}
-            >
-              <option value="Valid PrDP">Valid PrDP</option>
-              <option value="PrDP Expiring Soon">PrDP Expiring Soon</option>
-              <option value="PrDP Expired">PrDP Expired</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label className="form-label">Medical Status</label>
-            <select
-              className="form-control"
-              value={formData.medicalStatus}
-              onChange={(e) => setFormData({...formData, medicalStatus: e.target.value})}
-            >
-              <option value="Valid">Valid</option>
-              <option value="Renewal Due">Renewal Due</option>
-              <option value="Expired">Expired</option>
-            </select>
-          </div>
-          <div className="form-group">
             <label className="form-label">Route Assignment</label>
-            <input
-              type="text"
+            <select
               className="form-control"
               value={formData.routeAssignment}
               onChange={(e) => setFormData({...formData, routeAssignment: e.target.value})}
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Hire Date</label>
-            <input
-              type="date"
-              className="form-control"
-              value={formData.hireDate}
-              onChange={(e) => setFormData({...formData, hireDate: e.target.value})}
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Next Training Due</label>
-            <input
-              type="date"
-              className="form-control"
-              value={formData.nextTrainingDue}
-              onChange={(e) => setFormData({...formData, nextTrainingDue: e.target.value})}
-            />
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="form-label">Address</label>
-          <textarea
-            className="form-control"
-            value={formData.address}
-            onChange={(e) => setFormData({...formData, address: e.target.value})}
-            rows="3"
-          />
-        </div>
-        <div className="form-grid">
-          <div className="form-group">
-            <label>
-              <input
-                type="checkbox"
-                checked={formData.universalAccessTrained}
-                onChange={(e) => setFormData({...formData, universalAccessTrained: e.target.checked})}
-                style={{marginRight: '0.5rem'}}
-              />
-              Universal Access Trained
-            </label>
-          </div>
-          <div className="form-group">
-            <label>
-              <input
-                type="checkbox"
-                checked={formData.customerServiceTrained}
-                onChange={(e) => setFormData({...formData, customerServiceTrained: e.target.checked})}
-                style={{marginRight: '0.5rem'}}
-              />
-              Customer Service Trained
-            </label>
+            >
+              <option value="">Unassigned</option>
+              <option value="Phase 1A - Thokoza Park Route">Phase 1A - Thokoza Park Route</option>
+              <option value="Phase 1B - Soweto to CBD">Phase 1B - Soweto to CBD</option>
+              <option value="Phase 1C - Alexandra to Sandton">Phase 1C - Alexandra to Sandton</option>
+            </select>
           </div>
         </div>
         <div className="modal__footer">
@@ -791,29 +934,34 @@ const App = () => {
 
   // Drivers Section
   const DriversSection = () => {
-    const searchTerm = searchTerms.drivers;
+    const searchTerm = searchTerms.drivers.toLowerCase();
     const filteredDrivers = data.drivers.filter(driver =>
-      `${driver.firstName} ${driver.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      driver.employeeId.toLowerCase().includes(searchTerm.toLowerCase())
+      `${driver.firstName} ${driver.lastName}`.toLowerCase().includes(searchTerm) ||
+      driver.employeeId.toLowerCase().includes(searchTerm)
     );
 
     return (
       <div>
         <div className="page-header">
-          <h1 className="page-title">Drivers</h1>
+          <h1 className="page-title">{t.drivers}</h1>
           <div className="search-container">
             <input
               type="text"
               className="search-input"
-              placeholder="Search drivers..."
-              value={searchTerm}
+              placeholder={t.searchDrivers}
+              value={searchTerms.drivers}
               onChange={(e) => handleSearch('drivers', e.target.value)}
             />
             <button 
               className="btn btn--primary"
-              onClick={() => openModal('driver')}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                openModal('driver');
+              }}
+              type="button"
             >
-              Add Driver
+              {t.addDriver}
             </button>
           </div>
         </div>
@@ -824,10 +972,7 @@ const App = () => {
               <tr>
                 <th>Name</th>
                 <th>Employee ID</th>
-                <th>Contact</th>
                 <th>Status</th>
-                <th>License Status</th>
-                <th>Medical Status</th>
                 <th>Route Assignment</th>
                 <th>Actions</th>
               </tr>
@@ -835,31 +980,38 @@ const App = () => {
             <tbody>
               {filteredDrivers.map(driver => (
                 <tr key={driver.id}>
-                  <td>{`${driver.firstName} ${driver.lastName}`}</td>
-                  <td>{driver.employeeId}</td>
                   <td>
-                    <div>{driver.phone}</div>
-                    <div style={{ fontSize: '12px', opacity: 0.7 }}>
-                      {driver.email}
+                    <div className="contact-info">
+                      <div className="contact-primary">{`${driver.firstName} ${driver.lastName}`}</div>
+                      <div className="contact-secondary">{driver.email}</div>
                     </div>
                   </td>
+                  <td>{driver.employeeId}</td>
                   <td><StatusBadge status={driver.status} /></td>
-                  <td><StatusBadge status={driver.licenseStatus} /></td>
-                  <td><StatusBadge status={driver.medicalStatus} /></td>
                   <td>{driver.routeAssignment || 'Unassigned'}</td>
                   <td>
                     <div className="action-buttons">
                       <button 
                         className="btn-icon btn-icon--edit"
-                        onClick={() => openModal('driver', driver)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          openModal('driver', driver);
+                        }}
                         title="Edit"
+                        type="button"
                       >
                         ✏️
                       </button>
                       <button 
                         className="btn-icon btn-icon--delete"
-                        onClick={() => deleteItem('drivers', driver.id)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          deleteItem('drivers', driver.id);
+                        }}
                         title="Delete"
+                        type="button"
                       >
                         🗑️
                       </button>
@@ -889,609 +1041,96 @@ const App = () => {
     );
   };
 
-  // License Form Component
-  const LicenseForm = ({ license, onSave, onCancel }) => {
-    const [formData, setFormData] = useState(license || {
-      driverName: '',
-      licenseType: 'PrDP Code 14',
-      licenseNumber: '',
-      issueDate: '',
-      expiryDate: '',
-      status: 'Valid'
-    });
-
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      onSave(formData);
-      onCancel();
-    };
-
-    return (
-      <form onSubmit={handleSubmit}>
-        <div className="form-grid">
-          <div className="form-group">
-            <label className="form-label">Driver Name</label>
-            <input
-              type="text"
-              className="form-control"
-              value={formData.driverName}
-              onChange={(e) => setFormData({...formData, driverName: e.target.value})}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">License Type</label>
-            <select
-              className="form-control"
-              value={formData.licenseType}
-              onChange={(e) => setFormData({...formData, licenseType: e.target.value})}
-            >
-              <option value="PrDP Code 14">PrDP Code 14</option>
-              <option value="PrDP Code 10">PrDP Code 10</option>
-              <option value="Code 14">Code 14</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label className="form-label">License Number</label>
-            <input
-              type="text"
-              className="form-control"
-              value={formData.licenseNumber}
-              onChange={(e) => setFormData({...formData, licenseNumber: e.target.value})}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Status</label>
-            <select
-              className="form-control"
-              value={formData.status}
-              onChange={(e) => setFormData({...formData, status: e.target.value})}
-            >
-              <option value="Valid">Valid</option>
-              <option value="Expiring Soon">Expiring Soon</option>
-              <option value="Expired">Expired</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label className="form-label">Issue Date</label>
-            <input
-              type="date"
-              className="form-control"
-              value={formData.issueDate}
-              onChange={(e) => setFormData({...formData, issueDate: e.target.value})}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Expiry Date</label>
-            <input
-              type="date"
-              className="form-control"
-              value={formData.expiryDate}
-              onChange={(e) => setFormData({...formData, expiryDate: e.target.value})}
-              required
-            />
-          </div>
-        </div>
-        <div className="modal__footer">
-          <button type="button" className="btn btn--secondary" onClick={onCancel}>
-            Cancel
-          </button>
-          <button type="submit" className="btn btn--primary">
-            Save License
-          </button>
-        </div>
-      </form>
-    );
-  };
-
   // Licenses Section
-  const LicensesSection = () => {
-    const searchTerm = searchTerms.licenses;
-    const filteredLicenses = data.licenses.filter(license =>
-      license.driverName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      license.licenseNumber.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    return (
-      <div>
-        <div className="page-header">
-          <h1 className="page-title">Licenses</h1>
-          <div className="search-container">
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search licenses..."
-              value={searchTerm}
-              onChange={(e) => handleSearch('licenses', e.target.value)}
-            />
-            <button 
-              className="btn btn--primary"
-              onClick={() => openModal('license')}
-            >
-              Add License
-            </button>
-          </div>
-        </div>
-
-        <div className="content-section">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Driver Name</th>
-                <th>License Type</th>
-                <th>License Number</th>
-                <th>Issue Date</th>
-                <th>Expiry Date</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredLicenses.map(license => (
-                <tr key={license.id}>
-                  <td>{license.driverName}</td>
-                  <td>{license.licenseType}</td>
-                  <td>{license.licenseNumber}</td>
-                  <td>{license.issueDate}</td>
-                  <td>{license.expiryDate}</td>
-                  <td><StatusBadge status={license.status} /></td>
-                  <td>
-                    <div className="action-buttons">
-                      <button 
-                        className="btn-icon btn-icon--edit"
-                        onClick={() => openModal('license', license)}
-                        title="Edit"
-                      >
-                        ✏️
-                      </button>
-                      <button 
-                        className="btn-icon btn-icon--delete"
-                        onClick={() => deleteItem('licenses', license.id)}
-                        title="Delete"
-                      >
-                        🗑️
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <Modal 
-          isOpen={modals.license}
-          onClose={() => closeModal('license')}
-          title={editingItem ? 'Edit License' : 'Add New License'}
-        >
-          <LicenseForm
-            license={editingItem}
-            onSave={editingItem ? 
-              (data) => updateItem('licenses', { ...data, id: editingItem.id }) :
-              (data) => addItem('licenses', data)
-            }
-            onCancel={() => closeModal('license')}
-          />
-        </Modal>
+  const LicensesSection = () => (
+    <div>
+      <div className="page-header">
+        <h1 className="page-title">{t.licenses}</h1>
       </div>
-    );
-  };
-
-  // Bus Form Component
-  const BusForm = ({ bus, onSave, onCancel }) => {
-    const [formData, setFormData] = useState(bus || {
-      busNumber: '',
-      fleetNumber: '',
-      make: '',
-      model: '',
-      year: new Date().getFullYear(),
-      registration: '',
-      routeAssignment: '',
-      status: 'In Service',
-      wheelchairAccessible: true,
-      wifiEnabled: true,
-      currentStation: ''
-    });
-
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      onSave(formData);
-      onCancel();
-    };
-
-    return (
-      <form onSubmit={handleSubmit}>
-        <div className="form-grid">
-          <div className="form-group">
-            <label className="form-label">Bus Number</label>
-            <input
-              type="text"
-              className="form-control"
-              value={formData.busNumber}
-              onChange={(e) => setFormData({...formData, busNumber: e.target.value})}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Fleet Number</label>
-            <input
-              type="text"
-              className="form-control"
-              value={formData.fleetNumber}
-              onChange={(e) => setFormData({...formData, fleetNumber: e.target.value})}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Make</label>
-            <input
-              type="text"
-              className="form-control"
-              value={formData.make}
-              onChange={(e) => setFormData({...formData, make: e.target.value})}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Model</label>
-            <input
-              type="text"
-              className="form-control"
-              value={formData.model}
-              onChange={(e) => setFormData({...formData, model: e.target.value})}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Year</label>
-            <input
-              type="number"
-              className="form-control"
-              value={formData.year}
-              onChange={(e) => setFormData({...formData, year: parseInt(e.target.value)})}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Registration</label>
-            <input
-              type="text"
-              className="form-control"
-              value={formData.registration}
-              onChange={(e) => setFormData({...formData, registration: e.target.value})}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Status</label>
-            <select
-              className="form-control"
-              value={formData.status}
-              onChange={(e) => setFormData({...formData, status: e.target.value})}
-            >
-              <option value="In Service">In Service</option>
-              <option value="In Workshop">In Workshop</option>
-              <option value="Out of Service">Out of Service</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label className="form-label">Current Station</label>
-            <input
-              type="text"
-              className="form-control"
-              value={formData.currentStation}
-              onChange={(e) => setFormData({...formData, currentStation: e.target.value})}
-            />
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="form-label">Route Assignment</label>
-          <input
-            type="text"
-            className="form-control"
-            value={formData.routeAssignment}
-            onChange={(e) => setFormData({...formData, routeAssignment: e.target.value})}
-          />
-        </div>
-        <div className="form-grid">
-          <div className="form-group">
-            <label>
-              <input
-                type="checkbox"
-                checked={formData.wheelchairAccessible}
-                onChange={(e) => setFormData({...formData, wheelchairAccessible: e.target.checked})}
-                style={{marginRight: '0.5rem'}}
-              />
-              Wheelchair Accessible
-            </label>
-          </div>
-          <div className="form-group">
-            <label>
-              <input
-                type="checkbox"
-                checked={formData.wifiEnabled}
-                onChange={(e) => setFormData({...formData, wifiEnabled: e.target.checked})}
-                style={{marginRight: '0.5rem'}}
-              />
-              WiFi Enabled
-            </label>
-          </div>
-        </div>
-        <div className="modal__footer">
-          <button type="button" className="btn btn--secondary" onClick={onCancel}>
-            Cancel
-          </button>
-          <button type="submit" className="btn btn--primary">
-            Save Bus
-          </button>
-        </div>
-      </form>
-    );
-  };
-
-  // Buses Section
-  const BusesSection = () => {
-    const searchTerm = searchTerms.buses;
-    const filteredBuses = data.buses.filter(bus =>
-      bus.busNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      bus.make.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      bus.registration.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    return (
-      <div>
-        <div className="page-header">
-          <h1 className="page-title">Buses</h1>
-          <div className="search-container">
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search buses..."
-              value={searchTerm}
-              onChange={(e) => handleSearch('buses', e.target.value)}
-            />
-            <button 
-              className="btn btn--primary"
-              onClick={() => openModal('bus')}
-            >
-              Add Bus
-            </button>
-          </div>
-        </div>
-
-        <div className="content-section">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Bus Number</th>
-                <th>Fleet Number</th>
-                <th>Make & Model</th>
-                <th>Registration</th>
-                <th>Status</th>
-                <th>Route Assignment</th>
-                <th>Current Station</th>
-                <th>Actions</th>
+      <div className="content-section">
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>Driver Name</th>
+              <th>License Number</th>
+              <th>Expiry Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.licenses.map(license => (
+              <tr key={license.id}>
+                <td>{license.driverName}</td>
+                <td>{license.licenseNumber}</td>
+                <td>{license.expiryDate}</td>
+                <td><StatusBadge status={license.status} /></td>
               </tr>
-            </thead>
-            <tbody>
-              {filteredBuses.map(bus => (
-                <tr key={bus.id}>
-                  <td>{bus.busNumber}</td>
-                  <td>{bus.fleetNumber}</td>
-                  <td>{`${bus.make} ${bus.model}`} ({bus.year})</td>
-                  <td>{bus.registration}</td>
-                  <td><StatusBadge status={bus.status} /></td>
-                  <td>{bus.routeAssignment || 'Unassigned'}</td>
-                  <td>{bus.currentStation}</td>
-                  <td>
-                    <div className="action-buttons">
-                      <button 
-                        className="btn-icon btn-icon--edit"
-                        onClick={() => openModal('bus', bus)}
-                        title="Edit"
-                      >
-                        ✏️
-                      </button>
-                      <button 
-                        className="btn-icon btn-icon--delete"
-                        onClick={() => deleteItem('buses', bus.id)}
-                        title="Delete"
-                      >
-                        🗑️
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <Modal 
-          isOpen={modals.bus}
-          onClose={() => closeModal('bus')}
-          title={editingItem ? 'Edit Bus' : 'Add New Bus'}
-        >
-          <BusForm
-            bus={editingItem}
-            onSave={editingItem ? 
-              (data) => updateItem('buses', { ...data, id: editingItem.id }) :
-              (data) => addItem('buses', data)
-            }
-            onCancel={() => closeModal('bus')}
-          />
-        </Modal>
+            ))}
+          </tbody>
+        </table>
       </div>
-    );
-  };
+    </div>
+  );
 
-  // Route Form Component
-  const RouteForm = ({ route, onSave, onCancel }) => {
-    const [formData, setFormData] = useState(route || {
-      routeName: '',
-      routeDescription: '',
-      operatingHours: '',
-      frequency: '',
-      stations: [],
-      assignedBuses: [],
-      assignedDrivers: []
-    });
-
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      onSave(formData);
-      onCancel();
-    };
-
-    return (
-      <form onSubmit={handleSubmit}>
-        <div className="form-grid">
-          <div className="form-group">
-            <label className="form-label">Route Name</label>
-            <input
-              type="text"
-              className="form-control"
-              value={formData.routeName}
-              onChange={(e) => setFormData({...formData, routeName: e.target.value})}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Operating Hours</label>
-            <input
-              type="text"
-              className="form-control"
-              value={formData.operatingHours}
-              onChange={(e) => setFormData({...formData, operatingHours: e.target.value})}
-              placeholder="e.g., 05:00 - 23:00"
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Frequency</label>
-            <input
-              type="text"
-              className="form-control"
-              value={formData.frequency}
-              onChange={(e) => setFormData({...formData, frequency: e.target.value})}
-              placeholder="e.g., Every 10 minutes"
-            />
-          </div>
-        </div>
-        <div className="form-group">
-          <label className="form-label">Route Description</label>
-          <textarea
-            className="form-control"
-            value={formData.routeDescription}
-            onChange={(e) => setFormData({...formData, routeDescription: e.target.value})}
-            rows="2"
-          />
-        </div>
-        <div className="modal__footer">
-          <button type="button" className="btn btn--secondary" onClick={onCancel}>
-            Cancel
-          </button>
-          <button type="submit" className="btn btn--primary">
-            Save Route
-          </button>
-        </div>
-      </form>
-    );
-  };
-
-  // Routes Section
-  const RoutesSection = () => {
-    const searchTerm = searchTerms.routes;
-    const filteredRoutes = data.routes.filter(route =>
-      route.routeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      route.routeDescription.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    return (
-      <div>
-        <div className="page-header">
-          <h1 className="page-title">Routes</h1>
-          <div className="search-container">
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search routes..."
-              value={searchTerm}
-              onChange={(e) => handleSearch('routes', e.target.value)}
-            />
-            <button 
-              className="btn btn--primary"
-              onClick={() => openModal('route')}
-            >
-              Add Route
-            </button>
-          </div>
-        </div>
-
-        <div className="content-section">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Route Name</th>
-                <th>Description</th>
-                <th>Operating Hours</th>
-                <th>Frequency</th>
-                <th>Assigned Buses</th>
-                <th>Assigned Drivers</th>
-                <th>Actions</th>
+  const BusesSection = () => (
+    <div>
+      <div className="page-header">
+        <h1 className="page-title">{t.buses}</h1>
+      </div>
+      <div className="content-section">
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>Bus Number</th>
+              <th>Make & Model</th>
+              <th>Status</th>
+              <th>Route</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.buses.map(bus => (
+              <tr key={bus.id}>
+                <td>{bus.busNumber}</td>
+                <td>{`${bus.make} ${bus.model}`}</td>
+                <td><StatusBadge status={bus.status} /></td>
+                <td>{bus.routeAssignment || 'Unassigned'}</td>
               </tr>
-            </thead>
-            <tbody>
-              {filteredRoutes.map(route => (
-                <tr key={route.id}>
-                  <td>{route.routeName}</td>
-                  <td>{route.routeDescription}</td>
-                  <td>{route.operatingHours}</td>
-                  <td>{route.frequency}</td>
-                  <td>{route.assignedBuses.join(', ') || 'None'}</td>
-                  <td>{route.assignedDrivers.join(', ') || 'None'}</td>
-                  <td>
-                    <div className="action-buttons">
-                      <button 
-                        className="btn-icon btn-icon--edit"
-                        onClick={() => openModal('route', route)}
-                        title="Edit"
-                      >
-                        ✏️
-                      </button>
-                      <button 
-                        className="btn-icon btn-icon--delete"
-                        onClick={() => deleteItem('routes', route.id)}
-                        title="Delete"
-                      >
-                        🗑️
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <Modal 
-          isOpen={modals.route}
-          onClose={() => closeModal('route')}
-          title={editingItem ? 'Edit Route' : 'Add New Route'}
-        >
-          <RouteForm
-            route={editingItem}
-            onSave={editingItem ? 
-              (data) => updateItem('routes', { ...data, id: editingItem.id }) :
-              (data) => addItem('routes', data)
-            }
-            onCancel={() => closeModal('route')}
-          />
-        </Modal>
+            ))}
+          </tbody>
+        </table>
       </div>
-    );
-  };
+    </div>
+  );
+
+  const RoutesSection = () => (
+    <div>
+      <div className="page-header">
+        <h1 className="page-title">{t.routes}</h1>
+      </div>
+      <div className="content-section">
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>Route</th>
+              <th>Description</th>
+              <th>Operating Hours</th>
+              <th>Frequency</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.routes.map(route => (
+              <tr key={route.id}>
+                <td>{route.routeName}</td>
+                <td>{route.routeDescription}</td>
+                <td>{route.operatingHours}</td>
+                <td>{route.frequency}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 
   // Main render function
   const renderContent = () => {
